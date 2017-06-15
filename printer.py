@@ -4,6 +4,8 @@ import shelve
 import tkMessageBox as tmb
 import subprocess as sp
 import Tkinter as tk
+import pdfkit
+import re
 
 class printer:
 	
@@ -144,6 +146,33 @@ def printreport(reportno, patient, doc, date, items, ip=None):
 	p.blank(6)
 	p.cut()
 	p.toprinter(printer=1)
+	
+def printreport2(reportno, patient, doc, date, items, ip=None):
+    
+	string="<html><body>"
+	string+='<style> .bigfont {font-size:18px;} .smallfont {font-size:12px} table{margin:2em;} tr{padding:.2em} td {padding:.2em 1em;}</style>'
+	string+='<div class="bigfont">Report number: ' +str(reportno) + '</div>'
+	string+='<div class="bigfont">Patient: ' +patient + '</div>'
+	string+='<div class="bigfont">Doctor: ' +doc + '</div>'
+	if ip:string+='<div class="bigfont">IP #: ' +str(ip) + '</div>'
+	string+='<div class="bigfont">date: ' +str(date) + '</div>'
+	string+='<table>'
+	for item in items:
+		item=re.sub(r'\n',r'</td></tr><tr><td>',item)
+		item=re.sub(r':',r'</td><td>:</td><td>',item)
+		string+='<tr><td>'+item+'</td></tr>'
+	string+="</table></body></html>"
+
+	options = {
+	'page-height':'7.5in',
+	'page-width':'5in',
+	'margin-top': '2in',
+	'margin-right': '0.2in',
+	'margin-bottom': '1in',
+	'margin-left': '0.2in',
+	}
+	pdfkit.from_string(string,"out.pdf",options=options)
+	sp.call("lp -d EPSON-L130-Series -o media=Custom.5x7.5in out.pdf",shell=True)
 
 def printinfo(lines):
 

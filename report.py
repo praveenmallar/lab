@@ -58,7 +58,7 @@ class Report(Frame):
 		db=cdb.Db().connection()
 		cur=db.cursor()
 		sql="select bill.name as name,age,bill.date  from bill  where bill.id=%s;"
-		cur.execute(sql,(billno))
+		cur.execute(sql,(billno,))
 		if cur.rowcount==0:
 			return
 		r=cur.fetchone()
@@ -66,7 +66,7 @@ class Report(Frame):
 		self.age.set(r[1])
 		self.date.set(r[2])
 		sql="select report.id, report.inv, report.report from report where report.bill=%s;"
-		cur.execute(sql,(billno))
+		cur.execute(sql,(billno,))
 		if cur.rowcount==0:
 			return
 		rows=cur.fetchall()
@@ -87,7 +87,8 @@ class Report(Frame):
 		self.f3=Frame(self)
 		self.f3.pack(side=TOP,padx=20,pady=20)	
 		Button(self.f3,text="Save ",padx=15, pady=3,command=self.save).pack(side=LEFT,padx=20,pady=5)
-		Button(self.f3,text="Print",padx=15,pady=3,command=self.printreport).pack(side=LEFT,padx=20,pady=5)
+		Button(self.f3,text="Print",padx=15,pady=3,command=lambda x=1:self.printreport(x)).pack(side=LEFT,padx=20,pady=5)
+		Button(self.f3,text="Print2",padx=15,pady=3,command=lambda x=2:self.printreport(x)).pack(side=LEFT,padx=20,pady=5)
 
 	def movebill(self,direction=1):
 		self.search.set(self.search.get()+direction)
@@ -114,20 +115,20 @@ class Report(Frame):
 			mb.showerror("error: "+e.args[0], e.args[1])
 			return False
 
-	def printreport(self):
+	def printreport(self,prinnum):
 		if not self.save():
 			return False
 		reportno=self.search.get()
 		db=cdb.Db().connection()
 		cur=db.cursor()
 		sql="select bill.name as patient, doc.name as doc, bill.date from bill join doc on bill.doc=doc.id where bill.id=%s;"
-		cur.execute(sql,(reportno))
+		cur.execute(sql,[reportno])
 		r=cur.fetchone()
 		patient=r[0]
 		doc=r[1]
 		date=r[2]
 		sql="select report.report as report, report.inv as inv from report  where report.bill=%s;"
-		cur.execute(sql,(reportno))
+		cur.execute(sql,[reportno])
 		rows=cur.fetchall()
 		items=[]
 		for r in rows:
@@ -135,14 +136,17 @@ class Report(Frame):
 				continue
 			else:
 				items.append(r[0])
-		printbill.printreport(reportno,patient,doc,date,items)			
+		if prinnum==1:
+		    printbill.printreport(reportno,patient,doc,date,items)
+		elif prinnum==2:
+		    printbill.printreport2(reportno,patient,doc,date,items)			
 
 	def checkbill(self):
 		db=cdb.Db().connection()
 		cur=db.cursor()
 		billno=self.search.get()
 		sql="select report.id from report where report.bill=%s"
-		cur.execute(sql,(billno))
+		cur.execute(sql,[billno])
 		rows=cur.fetchall()
 		ids=[]
 		for row in rows:

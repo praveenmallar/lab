@@ -6,7 +6,6 @@ import datetime as dt
 import shelve
 import tkMessageBox as tmb
 import connectdb as cdb
-from PIL import Image, ImageTk
 
 class Lab():
 
@@ -24,28 +23,23 @@ class Lab():
 	def addshortcuts(self):
 		f=Frame(self.master,bd=1,relief=SUNKEN)
 		f.pack()
-		image=Image.open("./images/bill.png")
-		photo=ImageTk.PhotoImage(image)
+		photo=PhotoImage(file="./images/bill.png")
 		b=Button(f,image=photo,text="bill",compound=BOTTOM,width=100,height=100,command=lambda:bill.Bill())
 		b.pack(side=LEFT)
 		b.image=photo
-		image=Image.open("./images/patient.png")
-		photo=ImageTk.PhotoImage(image)
+		photo=PhotoImage(file="./images/patient.png")
 		b=Button(f,image=photo,text="patient",compound=BOTTOM,width=100,height=100,command=lambda:patient.Patient())
 		b.pack(side=LEFT)
 		b.image=photo
-		image=Image.open("./images/inv.png")
-		photo=ImageTk.PhotoImage(image)
+		photo=PhotoImage(file="./images/inv.png")
 		b=Button(f,image=photo,text="investigation",compound=BOTTOM,width=100,height=100,command=lambda:inv.Inv())
 		b.pack(side=LEFT)
 		b.image=photo
-		image=Image.open("./images/report.png")
-		photo=ImageTk.PhotoImage(image)
+		photo=PhotoImage(file="./images/report.png")
 		b=Button(f,image=photo,text="report",compound=BOTTOM,width=100,height=100,command=lambda:report.Report())
 		b.pack(side=LEFT)
 		b.image=photo
-		image=Image.open("./images/cancel.png")
-		photo=ImageTk.PhotoImage(image)
+		photo=PhotoImage(file="./images/cancel.png")
 		b=Button(f,image=photo,text="cancel",compound=BOTTOM,width=100,height=100,command=lambda:cancel.Cancel())
 		b.pack(side=LEFT)
 		b.image=photo

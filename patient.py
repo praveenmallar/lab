@@ -39,9 +39,9 @@ def addPatient(ip,name):
 	con=cdb.Db().connection()
 	cur=con.cursor()
 	try:	
-		cur.execute("insert into patient (name) values(%s)",(name))
+		cur.execute("insert into patient (name) values(%s)",[name])
 		con.commit()
-	except cdb.Error (e):
+	except cdb.mdb.Error,e:
 		print "error %d : %s" %(e.args[0],e.args[1])
 		con.rollback()
 	else:

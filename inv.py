@@ -114,7 +114,7 @@ class InvFrame(Frame):
 			self.id=id
 			sql="select * from inv where id=%s"
 			cur=cdb.Db().connection().cursor()
-			cur.execute(sql,(id))
+			cur.execute(sql,(id,))
 			row=cur.fetchone()
 			self.name.set(row[1])
 			self.rate.set(row[2])

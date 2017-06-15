@@ -16,7 +16,7 @@ class Db:
 	sh = shelve.open('data.db')
 	sh['host']='localhost'
 	sh['db_user']='mukunda'
-	sh['db_pass']='gopidr'
+	sh['db_pass']='17299271'
 	sh['db']='lab'
  
  def connection(self):
